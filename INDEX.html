@@ -24,6 +24,23 @@
   <!-- responsive style -->
   <link href=".\responsive.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+  <script>
+    const loginData = JSON.parse(sessionStorage.getItem('loginData'));
+    const now = new Date().getTime();
+    const maxSessionTime = 2 * 60 * 1000; // 15 minutes in ms
+  
+    if (!loginData || now - loginData.loginTime > maxSessionTime) {
+      console.log('Session expired. Please login again.');
+      sessionStorage.clear(); // Clear old session
+      // window.location.href = 'INDEX.html'; // or your login page
+    } else {
+      console.log('User is logged in:', loginData.user);
+      // continue showing home page content
+
+      const loginOption = document.getElementById("login_option");
+      loginOption.style.display = "none";
+    }
+  </script>
 </head>
 
 <body>
@@ -76,16 +93,18 @@
                 </li>
               
             </ul>
-            <!--<div class="user_option">
-              <a href="">
-                <span>
-                  Login
-                </span>
-              </a>
+            <div class="user_option">
+              <div class="login_option" id="login-option">
+                <a href="login.html">
+                  <span>
+                    Login
+                  </span>
+                </a>
+              </div>
               <form class="form-inline my-2 my-lg-0 ml-0 ml-lg-4 mb-3 mb-lg-0">
                 <button class="btn  my-2 my-sm-0 nav_search-btn" type="submit"></button>
               </form>
-            </div>-->
+            </div>
           </div>
           
           <div>

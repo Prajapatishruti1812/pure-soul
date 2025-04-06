@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mental Wellness Login & Registration</title>
+  <!-- <link rel="stylesheet" href="C:\Users\Shruti\Desktop\WEBSITE\login.css"> -->
+  <link rel="stylesheet" href="login.css">
+</head>
+<body>
+
+  <div class="container">
+    <div class="form-container">
+      <!-- Login Form -->
+      <div class="form" id="login-form">
+        <h2>Login</h2>
+        <form id="login">
+          <div class="input-group">
+            <label for="login-user-id">Email or Username</label>
+            <input type="text" id="login-user-id" placeholder="Enter your email or username" required>
+          </div>
+          <div class="input-group">
+            <label for="login-password">Password</label>
+            <input type="password" id="login-password" placeholder="Enter your password" required>
+          </div>
+          <button type="submit">Login</button>
+        </form>
+        <p>Don't have an account? <a href="javascript:void(0);" onclick="toggleForms()">Sign up</a></p>
+      </div>
+
+      <!-- Registration Form -->
+      <div class="form" id="register-form" style="display: none;">
+        <h2>Sign Up</h2>
+        <form action="#" id="register">
+          <div class="input-group">
+            <label for="register-first-name">First Name</label>
+            <input type="text" id="register-first-name" placeholder="Enter your first name" required>
+          </div>
+          <div class="input-group">
+            <label for="register-last-name">Last Name</label>
+            <input type="text" id="register-last-name" placeholder="Enter your last name" />
+          </div>
+          <div class="input-group">
+            <label for="register-username">Username</label>
+            <input type="text" id="register-username" placeholder="Enter your username" required>
+          </div>
+          <div class="input-group">
+            <label for="register-email">Email</label>
+            <input type="email" id="register-email" placeholder="Enter your email" required>
+          </div>
+          <div class="input-group">
+            <label for="register-phone-number">Phone No.</label>
+            <input type="phone" id="register-phone-number" placeholder="Enter your phone number" required>
+          </div>
+          <div class="input-group">
+            <label for="register-password">Password</label>
+            <input type="password" id="register-password" placeholder="Enter your password" required>
+          </div>
+          <div class="input-group">
+            <label for="register-confirm-password">Confirm Password</label>
+            <input type="password" id="register-confirm-password" placeholder="Confirm your password" required>
+          </div>
+          <button type="submit">Sign Up</button>
+        </form>
+        <p>Already have an account? <a href="javascript:void(0);" onclick="toggleForms()">Login</a></p>
+      </div>
+    </div>
+  </div>
+
+  <script src="login.js"></script>
+  <script>
+    // Toggle between Login and Register forms
+function toggleForms() {
+  const loginForm = document.getElementById('login-form');
+  const registerForm = document.getElementById('register-form');
+
+  if (loginForm.style.display === 'none') {
+    loginForm.style.display = 'block';
+    registerForm.style.display = 'none';
+  } else {
+    loginForm.style.display = 'none';
+    registerForm.style.display = 'block';
+  }
+}
+
+// Handle Registration Form Submission
+document.getElementById('register').addEventListener('submit', async function (e) {
+  e.preventDefault();
+
+  // Get form values
+  const firstName = document.getElementById('register-first-name').value;
+  const lastName = document.getElementById('register-last-name').value;
+  const email = document.getElementById('register-email').value;
+  const phoneNumber = document.getElementById('register-phone-number').value;
+  const password = document.getElementById('register-password').value;
+  const confirmPassword = document.getElementById('register-confirm-password').value;
+
+  // You can create your own logic to generate or allow username entry
+  const username = email.split('@')[0]; // for example, take from email before @
+
+  // Build the payload
+  const payload = {
+    firstName,
+    lastName,
+    username,
+    email,
+    phoneNumber,
+    password,
+    confirmPassword
+  };
+
+  try {
+    const response = await fetch('http://localhost:8080/api/auth/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      alert('Registration successful!');
+      toggleForms(); // Go back to login form
+    } else {
+      alert('Registration failed: ' + (data.message || 'Unknown error'));
+    }
+  } catch (error) {
+    console.error('Error during registration:', error);
+    alert('An error occurred. Please try again.');
+  }
+});
+
+// Handle Login Form Submission
+document.getElementById('login').addEventListener('submit', async function (e) {
+  e.preventDefault();
+
+  const loginInput = document.getElementById('login-user-id').value;
+  const password = document.getElementById('login-password').value;
+
+  const payload = {
+    login: loginInput, // This can be username or email
+    password
+  };
+
+  try {
+    const response = await fetch('http://localhost:8080/api/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      // alert('Login successful!');
+      console.log(data);
+      if (data.response === "Login successful") {
+        console.log("Hurrreeeyyy!!!");
+
+        // Store login data in sessionStorage with timestamp
+        const loginData = {
+          user: data, // optionally extract data.token or user object
+          loginTime: new Date().getTime() // current timestamp in ms
+        };
+        sessionStorage.setItem('loginData', JSON.stringify(loginData));
+
+        window.location.href = 'INDEX.html';
+      }
+      // Optionally store token or redirect
+      console.log(data); // contains token or user info based on your backend
+    } else {
+      alert('Login failed: ' + (data.message || 'Invalid credentials'));
+    }
+  } catch (error) {
+    console.error('Error during login:', error);
+    alert('An error occurred. Please try again.');
+  }
+});
+
+
+  </script>
+</body>
+</html>

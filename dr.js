@@ -1,8 +1,8 @@
-/* const extraDoctors = [
+/*const extraDoctors = [
     { name: "Dr. Mike Johnson", specialty: "Orthopedic", experience: "12 Years", image: "doctor4.jpg" },
     { name: "Dr. Sarah Lee", specialty: "Pediatrician", experience: "9 Years", image: "doctor5.jpg" }
 ];
-
+*/
 // Function to Add Extra Doctors Dynamically
 function addExtraDoctors() {
     const container = document.getElementById("doctorsList");
@@ -38,4 +38,4 @@ function filterDoctors() {
 }
 
 // Load Extra Doctors on Page Load
-window.onload = addExtraDoctors; */
+window.onload = addExtraDoctors; 
