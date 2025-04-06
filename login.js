@@ -36,6 +36,6 @@ function toggleForms() {
     
     // Add your registration logic here (e.g., save new user data)
   
-    alert(`Registering with: ${email}`);
+    // alert(`Registering with: ${email}`);
   });
   
